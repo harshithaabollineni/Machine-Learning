@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TravelPredict AI — Travel Time Intelligence</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-shell">
+<header class="nav">
+  <a class="logo" href="#dashboard"><span class="logo-box">T</span> TravelPredict <small>ML</small></a>
+  <nav><a href="#dashboard">Dashboard</a><a href="#predict">Prediction</a><a href="#analytics">Analytics</a><a href="#models">Models</a><a href="#about">Project</a></nav>
+  <button class="outline-btn" onclick="document.getElementById('predict').scrollIntoView()">Run Prediction</button>
+</header>
+
+<section id="dashboard" class="hero">
+  <div class="hero-text">
+    <div class="live"><span></span> MACHINE LEARNING • REGRESSION</div>
+    <h1>Travel time,<br><em>predicted intelligently.</em></h1>
+    <p>A complete project dashboard for predicting journey duration with Ridge and Lasso Regression using travel distance, traffic, time, road and weather features.</p>
+    <div class="hero-buttons"><button class="main-btn" onclick="document.getElementById('predict').scrollIntoView()">Open Predictor <b>→</b></button><button class="ghost-btn" onclick="document.getElementById('analytics').scrollIntoView()">View Analytics</button></div>
+  </div>
+  <div class="hero-visual">
+    <div class="map-grid"></div>
+    <div class="route r1"></div><div class="route r2"></div><div class="route r3"></div>
+    <div class="map-pin p1">A</div><div class="map-pin p2">B</div><div class="map-pin p3">C</div>
+    <div class="floating-card fc1"><span>AVG. PREDICTION</span><strong id="heroPrediction">34 min</strong><small>Demo model result</small></div>
+    <div class="floating-card fc2"><span>MODEL STATUS</span><strong><i></i> READY</strong><small>Ridge + Lasso</small></div>
+  </div>
+</section>
+
+<section class="stats">
+  <div><span>DATASET</span><strong>1,000</strong><small>synthetic trips</small></div>
+  <div><span>FEATURES</span><strong>6</strong><small>travel variables</small></div>
+  <div><span>MODELS</span><strong>02</strong><small>Ridge + Lasso</small></div>
+  <div><span>TARGET</span><strong>Minutes</strong><small>travel duration</small></div>
+</section>
+
+<section id="predict" class="section">
+  <div class="section-title"><div><label>01 / PREDICTION</label><h2>Estimate your journey</h2></div><span class="chip green">● Model online</span></div>
+  <div class="prediction-layout">
+    <form id="form" class="card form">
+      <h3>Trip details</h3><p class="muted">Enter the conditions for the journey you want to estimate.</p>
+      <div class="two"><label>Distance (km)<input id="distance" type="number" min="1" max="100" value="18.5" step="0.1"></label><label>Time of day<input id="time" type="time" value="08:30"></label></div>
+      <label>Traffic level<select id="traffic"><option>Low</option><option selected>Moderate</option><option>High</option><option>Severe</option></select></label>
+      <div class="two"><label>Road type<select id="road"><option>Highway</option><option selected>Main Road</option><option>Urban Road</option><option>Residential</option></select></label><label>Weather<select id="weather"><option selected>Clear</option><option>Cloudy</option><option>Rain</option><option>Fog</option></select></label></div>
+      <button class="main-btn full" type="submit">Calculate Travel Time <b>→</b></button>
+      <div class="tiny-note">Demo uses the included 1,000-row synthetic dataset. Replace the model file later with your trained Scikit-learn model.</div>
+    </form>
+    <div class="result-area">
+      <div class="result-card">
+        <div class="result-head"><div><span>ESTIMATED JOURNEY</span><h3 id="resultTime">34 <small>min</small></h3></div><div class="result-badge">Ridge + Lasso</div></div>
+        <div class="result-line"><span>Ridge prediction</span><strong id="ridge">34 min</strong></div>
+        <div class="result-line"><span>Lasso prediction</span><strong id="lasso">35 min</strong></div>
+        <div class="result-foot"><span id="summary">18.5 km • Moderate traffic • Main Road</span><span>Updated now</span></div>
+      </div>
+      <div class="mini-grid"><div class="mini"><span>AVG SPEED</span><strong id="speed">32 km/h</strong></div><div class="mini"><span>TRAFFIC</span><strong id="trafficOut">Moderate</strong></div><div class="mini"><span>WEATHER</span><strong id="weatherOut">Clear</strong></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="analytics" class="section dark-section">
+  <div class="section-title"><div><label>02 / ANALYTICS</label><h2>Model evaluation</h2></div><span class="chip">Sample trained run</span></div>
+  <div class="analytics-grid">
+    <div class="card chart-card"><div class="card-title"><div><h3>Prediction error</h3><p class="muted">Illustrative results from the included dataset/model setup.</p></div></div><canvas id="errorChart"></canvas></div>
+    <div class="card score-card"><h3>Regression score</h3><div class="score-ring"><div><strong>0.91</strong><span>R²</span></div></div><div class="score-row"><span>Ridge</span><b>0.91</b></div><div class="score-row"><span>Lasso</span><b>0.90</b></div><p class="muted">Higher R² indicates more target variation explained by the regression model.</p></div>
+  </div>
+</section>
+
+<section id="models" class="section">
+  <div class="section-title"><div><label>03 / MODELS</label><h2>Why two regression models?</h2></div></div>
+  <div class="models">
+    <article class="model ridge-card"><div class="model-num">01</div><h3>Ridge Regression</h3><span>L2 REGULARISATION</span><p>Ridge adds a penalty based on squared coefficients. It shrinks large coefficients and helps manage correlated travel features.</p><code>Loss = Σ(y − ŷ)² + λΣβ²</code><div class="model-points"><b>Stability</b><b>Multicollinearity control</b><b>Generalisation</b></div></article>
+    <article class="model lasso-card"><div class="model-num">02</div><h3>Lasso Regression</h3><span>L1 REGULARISATION</span><p>Lasso uses the absolute values of coefficients. Less important features can reach zero, providing implicit feature selection.</p><code>Loss = Σ(y − ŷ)² + λΣ|β|</code><div class="model-points"><b>Feature selection</b><b>Simpler model</b><b>Generalisation</b></div></article>
+  </div>
+</section>
+
+<section class="section pipeline-section">
+  <div class="section-title"><div><label>04 / PIPELINE</label><h2>From raw data to prediction</h2></div></div>
+  <div class="pipeline">
+    <div><b>01</b><strong>CSV Dataset</strong><small>Historical travel data</small></div><i>→</i>
+    <div><b>02</b><strong>Preprocess</strong><small>Clean & transform</small></div><i>→</i>
+    <div><b>03</b><strong>Split & Scale</strong><small>Train / test</small></div><i>→</i>
+    <div><b>04</b><strong>Train</strong><small>Ridge + Lasso</small></div><i>→</i>
+    <div><b>05</b><strong>Evaluate</strong><small>MAE / MSE / RMSE / R²</small></div><i>→</i>
+    <div><b>06</b><strong>Predict</strong><small>Travel duration</small></div>
+  </div>
+</section>
+
+<section id="about" class="section about">
+  <div class="about-copy"><label>05 / PROJECT</label><h2>Travel Time Prediction<br>Using Ridge & Lasso Regression</h2><p>This project demonstrates supervised learning for intelligent transportation. The dataset included with this website is a clearly labelled synthetic academic dataset created for demonstration because the supplied project documents did not specify an original CSV source.</p><div class="tags"><span>Python 3.x</span><span>NumPy</span><span>Pandas</span><span>Matplotlib</span><span>Seaborn</span><span>Scikit-learn</span></div></div>
+  <div class="team-card"><span>PROJECT TEAM</span><h3>Naeeni Satwika</h3><p>2520090151</p><h3>Harshitha Bollineni</h3><p>2520080007</p><hr><span>GUIDE</span><h3>Dr. Y. Lakshmi Prasanna</h3><p>Assistant Professor, CSIT</p></div>
+</section>
+
+<footer><div><b>TravelPredict ML</b><span> • Machine Learning Project • A.Y. 2026–27</span></div><a href="#dashboard">↑ Back to top</a></footer>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
